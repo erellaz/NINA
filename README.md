@@ -18,13 +18,13 @@ Start APCC via script, alternativly use the APCC start module in AP tools
 
 If safe, unpark and start the imaging sequence.
 
-## NINA end of session and shut doen scripts
+## NINA end of session and shut down scripts
 ![Nina End](Nina_end.png)
-Stop guiding, discoonect the guider and park the scope while warming the camera slowly.
+Stop guiding, disconnect the guider and park the scope while warming up the camera slowly.
 
 Then kill phd2.
 
-Disconnect the rest of the equipment, EXCEPT, of course, the switch (if you used "Disconnect all", then you would not be able to switch off the equipment on the PDU using Switches).
+Disconnect the rest of the equipment, EXCEPT, of course, the switch (so can't use "Disconnet all").
 
 Once the Telescope is disconnected and the Mount is powered down, APCC should autoclose on its own after 1 minute, if properly configured. Except sometimes it does not, so for additional safety, kill APCC after 5mn just in case it failed to autoclose.
 
