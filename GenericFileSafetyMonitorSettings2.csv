@@ -1,0 +1,3 @@
+Type|monitorFile|monitorInterval|triggerPreamble|triggerText|Description|unsafeDelay|isActive
+Unsafe|\\DSOC-2\OBS RoofStatus\RoofStatusFile.txt|2|Roof|CLOSED|Roof status|2|True
+Safe|\\DSOC-2\OBS RoofStatus\RoofStatusFile.txt|2|Roof|OPEN|Roof status|2|True
