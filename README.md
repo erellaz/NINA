@@ -31,3 +31,5 @@ Once the Telescope is disconnected and the Mount is powered down, APCC should au
 Same for the AP driver.
 
 Then run a python script to clean up last night production using the NINA CSV. NINA needs to be configured to produce the CSV within the Session Metadata plugin tab. Use the defaul in the plugin settings page.
+
+![Nina Discord Messages](Nina_discord.png)
