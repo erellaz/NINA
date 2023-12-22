@@ -5,16 +5,16 @@ import datetime
 from discord import SyncWebhook
 
 # Nina data Path
-rootpath=r"C:\Users\x\Documents\N.I.N.A"
+rootpath=r"C:\Users\xx\Documents\N.I.N.A"
 
 # Nina log path
-NinaLogPath=r"C:\Users\x\AppData\Local\NINA\Logs"
+NinaLogPath=r"C:\Users\xx\AppData\Local\NINA\Logs"
 
 # Guider log path:
-PHD2LogPath=r"C:\Users\xl\Documents\PHD2"
+PHD2LogPath=r"C:\Users\xx\Documents\PHD2"
 
 # Path to the directory used for file synchronization
-syncdir=r"C:\Users\x\Desktop\xx-Share"
+syncdir=r"C:\Users\xx\Desktop\Moana-Share"
 
 # Path to the local back up directory
 backupdir=r"D:\Astro-Archive"
@@ -28,7 +28,7 @@ selector= {
 
 # Web hook for the telescope Discord server
 # Get Webhook from Discord>Server settings>Integration>webhooks
-webhook=SyncWebhook.from_url("https://discord.com/api/webhooks/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+webhook=SyncWebhook.from_url("https://discord.com/api/webhooks/xxxxxxxxxxxX")
 
 #______________________________________________________________________________
 def newest(path):
@@ -93,17 +93,21 @@ def CleanUp(pathinput,df,selector,webhook):
             return
     
     webhook.send("Total number of files: "+str(df['DetectedStars'].count()))
+    print("Total number of files: "+str(df['DetectedStars'].count()))
     
     print("Clean up on detected stars------------------------------------------")
     webhook.send("Removing files due to not enough stars: "+str(df.loc[df['DetectedStars']<selector['DetectedStars']].shape[0]))
+    print("Removing files due to not enough stars: "+str(df.loc[df['DetectedStars']<selector['DetectedStars']].shape[0]))
     MoveToTrash(df.loc[df['DetectedStars']<selector['DetectedStars'],["FilePath"]],trashpath)
     
     print("Clean up on HFR----------------------------------------------------")
     webhook.send("Removing files due to bad HFR: "+str(df.loc[df['HFR']>selector['HFR']].shape[0]))
+    print("Removing files due to bad HFR: "+str(df.loc[df['HFR']>selector['HFR']].shape[0]))
     MoveToTrash(df.loc[df['HFR']>selector['HFR'],["FilePath"]],trashpath)
     
     print("Clean up on Guiding---------------------------------------")
     webhook.send("Removing files due to bad guiding: "+str(df.loc[df['GuidingRMSArcSec']>selector['GuidingRMSArcSec']].shape[0]))
+    print("Removing files due to bad guiding: "+str(df.loc[df['GuidingRMSArcSec']>selector['GuidingRMSArcSec']].shape[0]))
     MoveToTrash(df.loc[df['GuidingRMSArcSec']>selector['GuidingRMSArcSec'],["FilePath"]],trashpath)
     
 #______________________________________________________________________________
@@ -145,20 +149,20 @@ if os.path.exists(pathinput):
     webhook.send("Create a local back up of daily production")
     try:
         # Trick: to get a folder up just use os.path.dirname twice back to back
-        shutil.copy(os.path.dirname(os.path.dirname(pathinput)),backupdir) 
-        webhook.send("...... done!")
+        shutil.copytree(os.path.dirname(pathinput),os.path.join(backupdir,os.path.basename(os.path.dirname(pathinput)))) 
+        webhook.send("Copied: "+os.path.dirname(pathinput)+" to "+backupdir)
     except:
-        print("Failed to copy production to backup directory")
-        webhook.send("Error to copy production to backup folder")     
+        print("Failed to copy",os.path.dirname(pathinput)," to ",backupdir," production to backup directory")
+        webhook.send("Failed to copy production to backup directory: "+os.path.dirname(pathinput)+" to "+backupdir)     
     
     webhook.send("Moving daily production to Sync folder")
     try:
         # Trick: to get a folder up just use os.path.dirname twice back to back
-        shutil.move(os.path.dirname(os.path.dirname(pathinput)),syncdir) 
-        webhook.send("...... done!")
+        shutil.move(os.path.dirname(pathinput),syncdir) 
+        webhook.send("Moved: "+os.path.dirname(pathinput)+" to "+syncdir)
     except:
         print("Failed to Move production to Sync directory")
-        webhook.send("Error moving production to Sync folder") 
+        webhook.send("Failed to Move production to Sync directory") 
     
 else:
     print("Nothing to process!")
@@ -169,15 +173,15 @@ else:
 
 import dlipower
 #if you get this error: 
-# Digital Loggers Web Powerswitch xxxxxx (UNCONNECTED)
+# Digital Loggers Web Powerswitch 192.168.xx.xx:xxx (UNCONNECTED)
 # Go to the PDU admin page and change:
 # Allow legacy plaintext login methods (enable)
 # Then also allow this if the outlet cannot be changed by the script:
 # Allow legacy state-changing GET requests
 
-hostname=r"192.168.xxx.xxx:xxxxx" # include port
-userid="xxxxxx"
-password="xxxxxxx"
+hostname=r"192.168.xx.xx:xxx" 
+userid="xx"
+password="xx"
 
 print('Connecting to DLI PowerSwitch:',hostname, userid, password)
 
@@ -190,7 +194,7 @@ print(switch)
 for i in [1, 2, 3, 4]:
     if switch[i].state != "OFF":
         webhook.send("ALERT: PDU ",i," seems to be still ON, switching OFF")
-        status1=switch.off(outlet=1)
+        status1=switch.off(outlet=i)
         
     
 webhook.send("Checking the status of the PDUs"+str(switch))
