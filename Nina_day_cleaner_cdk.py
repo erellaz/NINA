@@ -6,16 +6,16 @@ import zipfile
 from discord import SyncWebhook
 
 # Nina data Path
-rootpath=r"C:\Users\g\Documents\N.I.N.A"
+rootpath=r"C:\Users\xx\Documents\N.I.N.A"
 
 # Nina log path
-NinaLogPath=r"C:\Users\g\AppData\Local\NINA\Logs"
+NinaLogPath=r"C:\Users\xx\AppData\Local\NINA\Logs"
 
 # Guider log path:
-PHD2LogPath=r"C:\Users\g\Documents\PHD2"
+PHD2LogPath=r"C:\Users\xx\Documents\PHD2"
 
 # Path to the directory used for file synchronization
-syncdir=r"C:\Users\g\Desktop\Share"
+syncdir=r"C:\Users\xx\Desktop\Share"
 
 # Path to the local back up directory
 #backupdir=r"D:\Astro-Archive"
@@ -30,7 +30,7 @@ selector= {
 
 # Web hook for the telescope Discord server
 # Get Webhook from Discord>Server settings>Integration>webhooks
-webhook=SyncWebhook.from_url(r"https://discord.com/api/webhooks/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+webhook=SyncWebhook.from_url(r"https://discord.com/api/webhooks/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 
 # Verbosity: 0=quiet, 1 st dout, 2 std out and discord
 verbosity=2
@@ -85,6 +85,12 @@ def LoadImageMetaData(pathinput):
     
     print(df)
     return df
+
+#______________________________________________________________________________
+def FilterDataset(df,ystr,column_name='FilePath'):
+    # filter the dataset based on values in column, for example if the FilePath column contains a certain date
+    df_filtered = df[df[column_name].str.contains(ystr)]
+    return df_filtered 
 
 #______________________________________________________________________________    
 def MoveToTrash(df,trashpath):
@@ -160,7 +166,8 @@ pathinput,ystr=GuessPath(rootpath)
 if os.path.exists(pathinput):
     Talk(verbosity,"Python deamon is initiating production cleanup from NINA logs.",webhook)
     
-    df=LoadImageMetaData(pathinput)
+    dfall=LoadImageMetaData(pathinput) # load all the metadata
+    df=FilterDataset(dfall,r"N.I.N.A/"+ystr) # keep only the relevant date in the dataset
     #print(df)
     FitsCompressor(pathinput,pathinput,verbosity,webhook)
     CleanUp(pathinput,df,selector,verbosity,webhook)
